@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRANSGOLD MARKETS — Live</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#D4A94A;--gold-dim:#8A6A1F;
+  --bg:#090909;--bg2:#0F0F0F;--bg3:#161616;
+  --green:#22C55E;--red:#EF4444;--silver:#B0BAC8;
+  --border-gold:rgba(212,169,74,0.18);
+  --border-green:rgba(34,197,94,0.35);
+  --glow:0 0 0 1px rgba(34,197,94,0.3), 0 0 10px rgba(34,197,94,0.08);
+  --text:#F0EBE0;--muted:#6B6660;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'SF Pro Display',Inter,system-ui,sans-serif;display:flex;flex-direction:column}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 36px;background:var(--bg2);border-bottom:2px solid rgba(212,169,74,0.25);flex-shrink:0;gap:16px;min-height:90px;position:relative}
+.logo{display:flex;align-items:center;gap:14px;min-width:220px}
+.logo img{height:64px;width:auto;object-fit:contain}
+.logo-text{display:flex;flex-direction:column;gap:3px}
+.logo-name{font-size:22px;font-weight:800;letter-spacing:.12em;color:var(--gold);line-height:1}
+.logo-sub{font-size:10px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+.hdr-mid{flex:1;display:flex;align-items:center;justify-content:center;gap:36px;flex-wrap:wrap}
+.spot-item{display:flex;flex-direction:column;align-items:center;gap:3px}
+.spot-lbl{font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.spot-val{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.spot-chg{font-size:12px;font-weight:700}
+.up{color:var(--green)}.dn{color:var(--red)}.down{color:var(--red)}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.18em;color:var(--green);font-weight:800;padding:7px 16px;border:1px solid rgba(34,197,94,.35);border-radius:20px;background:rgba(34,197,94,.06)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:blink 1.8s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.hdr-time{text-align:right;min-width:170px}
+.clock{font-size:36px;font-weight:700;letter-spacing:.04em;font-variant-numeric:tabular-nums;line-height:1}
+.dateline{font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-top:4px}
+
+
+/* BODY */
+.body{display:flex;flex:1;overflow:hidden}
+
+/* LEFT PRICES */
+.prices{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:16px}
+.prices::-webkit-scrollbar{width:3px}
+.prices::-webkit-scrollbar-thumb{background:rgba(34,197,94,.2);border-radius:2px}
+.sec-title{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.22em;font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.sec-dot{width:8px;height:8px;border-radius:50%}
+.gold-dot{background:var(--gold)}.silver-dot{background:var(--silver)}
+.tbl-head{display:grid;grid-template-columns:1.6fr 130px 1fr 1fr;padding:4px 16px;font-size:9px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid rgba(34,197,94,.1);margin-bottom:6px}
+.row{display:grid;grid-template-columns:1.6fr 130px 1fr 1fr;align-items:center;padding:14px 16px;background:var(--bg2);border:1px solid var(--border-green);border-radius:8px;margin-bottom:8px;position:relative;overflow:hidden;box-shadow:var(--glow);transition:border-color .2s,box-shadow .2s}
+.row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.grow::before{background:var(--gold)}.srow::before{background:var(--silver)}
+.row:hover{border-color:rgba(34,197,94,.6);box-shadow:0 0 0 1px rgba(34,197,94,.5),0 0 18px rgba(34,197,94,.14)}
+.cname{font-size:clamp(16px,1.8vw,22px);font-weight:700}
+.badge{display:inline-block;font-size:13px;padding:3px 9px;border-radius:4px;margin-left:8px;vertical-align:middle;letter-spacing:.06em;font-weight:700}
+.gbadge{background:rgba(212,169,74,.18);color:var(--gold);border:1px solid rgba(212,169,74,.5)}
+.sbadge{background:rgba(176,186,200,.15);color:var(--silver);border:1px solid rgba(176,186,200,.4)}
+.wtag{display:inline-flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;padding:8px 18px;border:2px solid var(--gold);border-radius:6px;color:var(--gold);letter-spacing:.1em;background:rgba(212,169,74,.1);min-width:100px}
+.buy-price{font-size:clamp(16px,1.9vw,24px);font-weight:700;color:var(--green);font-variant-numeric:tabular-nums}
+.sell-price{font-size:clamp(16px,1.9vw,24px);font-weight:700;color:var(--red);font-variant-numeric:tabular-nums}
+.plbl{font-size:9px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:2px}
+@keyframes fgreen{0%,100%{background:transparent}50%{background:rgba(34,197,94,.08)}}
+.fg{animation:fgreen .5s ease}
+
+/* RIGHT PANEL — hidden when no media */
+.right{width:300px;flex-shrink:0;border-left:1px solid var(--border-gold);display:flex;flex-direction:column;background:var(--bg2);overflow:hidden;transition:width .4s ease}
+.right.collapsed{width:0;border-left:none;overflow:hidden}
+.media-area{display:none;flex:1;position:relative;overflow:hidden;align-items:center;justify-content:center;background:#0A0A0A;min-height:0}
+.media-area.active{display:flex}
+.media-slot{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease;pointer-events:none}
+.media-slot.visible{opacity:1}
+.media-slot img,.media-slot video{width:100%;height:100%;object-fit:cover;display:block}
+.media-area img,.media-area video{width:100%;height:100%;object-fit:cover;display:block}
+.media-lbl{position:absolute;bottom:0;left:0;right:0;padding:8px 12px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.no-media{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);height:100%;padding:20px;text-align:center}
+.no-media svg{opacity:.2}
+.no-media span{font-size:9px;letter-spacing:.2em;text-transform:uppercase}
+.boxes{flex:1;display:flex;flex-direction:column;border-top:none}
+.box{flex:1;padding:11px 14px;border-bottom:1px solid var(--border-gold);display:flex;flex-direction:column;justify-content:center}
+.box:last-child{border-bottom:none}
+.box-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.btdot{width:5px;height:5px;border-radius:50%}
+.spot-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.spot-row:last-of-type{margin-bottom:0}
+.spot-row-lbl{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.spot-pill{font-size:13px;font-weight:700;padding:3px 10px;border-radius:4px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.gpill{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.rpill{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+.chg-line{text-align:right;font-size:10px;font-weight:600;margin-top:3px}
+.sent-bar-bg{background:var(--bg3);border-radius:3px;height:5px;overflow:hidden;margin:6px 0}
+.sent-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green) 0%,#f0c040 50%,var(--red) 100%);transition:width 1.2s ease;animation:sent-breathe 4s ease-in-out infinite;position:relative;overflow:hidden}
+@keyframes sent-breathe{0%,100%{filter:brightness(1) drop-shadow(0 0 3px rgba(34,197,94,0.4))}50%{filter:brightness(1.2) drop-shadow(0 0 8px rgba(34,197,94,0.8))}}
+.sent-bar::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent);animation:sent-shimmer 2.5s infinite}
+@keyframes sent-shimmer{0%{left:-60%}100%{left:130%}}
+.sent-lbls{display:flex;justify-content:space-between;font-size:10px}
+.sent-lbls .b{color:var(--green);font-weight:600}
+.sent-lbls .s{color:var(--red);font-weight:600}
+.forex-row{display:none}
+
+/* TICKER — replaced by TradingView widget */
+.ti{display:inline-flex;align-items:center;gap:7px;padding:0 24px;font-size:12px;letter-spacing:.06em;border-right:1px solid rgba(34,197,94,.1)}
+.ti-name{color:var(--muted)}
+.ti-val{font-weight:700;font-variant-numeric:tabular-nums}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ═══════════════════════════════════════════
+   ADMIN PANEL OVERLAY
+═══════════════════════════════════════════ */
+.admin-overlay{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+}
+.admin-overlay.open{display:flex}
+.admin-panel{
+  background:#111;border:1px solid rgba(212,169,74,.3);border-radius:14px;
+  width:min(780px,96vw);max-height:92vh;min-height:500px;overflow-y:auto;
+  box-shadow:0 0 60px rgba(0,0,0,.8);
+}
+.admin-panel::-webkit-scrollbar{width:4px}
+.admin-panel::-webkit-scrollbar-thumb{background:rgba(212,169,74,.2);border-radius:2px}
+.ap-tabs{display:flex;gap:4px;padding:12px 16px 0;border-bottom:1px solid rgba(212,169,74,.12);background:#0d0d0d;}
+.ap-tab{padding:8px 16px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--muted);cursor:pointer;border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;transition:all .2s;}
+.ap-tab:hover{color:var(--gold);}
+.ap-tab.active{color:var(--gold);background:#141414;border-color:rgba(212,169,74,.2);}
+.ap-tab-content{display:none;}
+.ap-tab-content.active{display:block;}
+
+.ap-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid rgba(212,169,74,.15)}
+.ap-title{font-size:16px;font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase}
+.ap-close{background:none;border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:18px;width:32px;height:32px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.ap-close:hover{border-color:var(--red);color:var(--red)}
+.ap-body{padding:24px}
+.ap-section{margin-bottom:28px}
+.ap-section-title{font-size:10px;letter-spacing:.22em;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(212,169,74,.12)}
+.ap-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ap-row{display:grid;grid-template-columns:1.5fr 1fr 1fr 80px;gap:8px;align-items:center;margin-bottom:8px;background:var(--bg3);padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.04)}
+.ap-lbl{font-size:11px;color:var(--muted);letter-spacing:.06em}
+.ap-input{background:#0A0A0A;border:1px solid rgba(255,255,255,.1);color:var(--text);font-size:13px;font-weight:600;padding:7px 10px;border-radius:6px;width:100%;font-variant-numeric:tabular-nums;outline:none;transition:border-color .2s}
+.ap-input:focus{border-color:rgba(212,169,74,.5)}
+.ap-input.green{color:var(--green)}
+.ap-input.red{color:var(--red)}
+.ap-save-row{background:none;border:1px solid rgba(34,197,94,.3);color:var(--green);font-size:11px;font-weight:700;padding:7px 14px;border-radius:6px;cursor:pointer;letter-spacing:.08em;transition:all .2s;white-space:nowrap}
+.ap-save-row:hover{background:rgba(34,197,94,.1)}
+.ap-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;border:none;transition:all .2s}
+.ap-btn-primary{background:var(--gold);color:#000}
+.ap-btn-primary:hover{background:#e8b84b}
+.ap-btn-outline{background:transparent;border:1px solid rgba(212,169,74,.35);color:var(--gold)}
+.ap-btn-outline:hover{background:rgba(212,169,74,.08)}
+.ap-btn-danger{background:transparent;border:1px solid rgba(239,68,68,.35);color:var(--red)}
+.ap-btn-danger:hover{background:rgba(239,68,68,.08)}
+.media-upload-box{border:2px dashed rgba(212,169,74,.2);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:border-color .2s;position:relative}
+.media-upload-box:hover{border-color:rgba(212,169,74,.5)}
+.media-upload-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.media-upload-box .up-icon{font-size:28px;margin-bottom:8px}
+.media-upload-box p{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.media-upload-box .up-name{font-size:11px;color:var(--gold);margin-top:6px;font-weight:600}
+.media-preview{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-top:12px;display:none}
+.spread-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.spread-lbl{font-size:11px;color:var(--muted);min-width:120px;letter-spacing:.06em}
+.spread-input{background:#0A0A0A;border:1px solid rgba(255,255,255,.1);color:var(--gold);font-size:14px;font-weight:700;padding:8px 12px;border-radius:6px;width:110px;outline:none}
+.spread-input:focus{border-color:rgba(212,169,74,.5)}
+.ap-toast{display:none;position:fixed;bottom:24px;right:24px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:var(--green);padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:2000;letter-spacing:.06em}
+.ap-toast.show{display:block;animation:fadeup .3s ease}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — TABLET  ≤900px
+═══════════════════════════════════════════ */
+@media(max-width:900px){
+  html,body{overflow:auto}
+  .body{flex-direction:column;overflow:visible}
+
+  /* right panel: horizontal strip below price list */
+  .right{width:100%;border-left:none;border-top:1px solid var(--border-gold);
+         flex-direction:row;height:200px}
+  .right.collapsed{width:100%;height:0;border-top:none}
+  .media-area{flex:1;min-height:unset}
+  .boxes{flex-direction:row;flex:1;border-top:none;border-left:1px solid var(--border-gold)}
+  .box{border-bottom:none;border-right:1px solid var(--border-gold);flex:1}
+  .box:last-child{border-right:none}
+
+  /* header */
+  .hdr{padding:12px 20px;min-height:unset}
+  .clock{font-size:26px}
+  .ap-row{grid-template-columns:1fr 1fr 1fr 70px}
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — MOBILE  ≤580px
+═══════════════════════════════════════════ */
+@media(max-width:580px){
+  /* ── scrollable page ── */
+  html,body{height:auto;overflow:auto}
+  body{flex-direction:column}
+
+  /* ── HEADER: two rows ──
+     Row 1: logo  |  clock
+     Row 2: gold spot  •  LIVE  •  silver spot
+  ── */
+  .hdr{
+    flex-wrap:wrap;
+    padding:12px 16px;
+    gap:8px;
+    min-height:unset;
+  }
+  .logo{min-width:unset;flex:1}
+  .logo img{height:40px}
+  /* hide fallback svg text on very small, keep icon */
+  .logo-text .logo-sub{display:none}
+  .logo-name{font-size:16px}
+
+  /* clock right-aligned, same row as logo */
+  .hdr-time{min-width:unset;order:2}
+  .clock{font-size:22px;letter-spacing:.02em}
+  .dateline{font-size:8px;letter-spacing:.1em}
+
+  /* spot prices: full-width second row */
+  .hdr-mid{
+    width:100%;
+    order:3;
+    gap:12px;
+    justify-content:space-around;
+    padding-top:6px;
+    border-top:1px solid rgba(212,169,74,.12);
+  }
+  .spot-val{font-size:16px}
+  .spot-chg{font-size:10px}
+  .live-badge{font-size:9px;padding:5px 10px}
+
+  /* ── PRICE ROWS: 2-row card layout ──
+     Top:    [Name + badge]   [weight tag]
+     Bottom: [BUY price]      [SELL price]
+  ── */
+  .tbl-head{display:none} /* hide column headers — redundant with per-cell labels */
+
+  .row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto auto;
+    gap:8px 0;
+    padding:12px 14px 12px 18px;
+  }
+
+  /* col 1 row 1: name + purity badge */
+  .row > div:nth-child(1){
+    grid-column:1;grid-row:1;
+    align-self:center;
+  }
+  /* col 2 row 1: weight tag — right-aligned */
+  .row > div:nth-child(2){
+    grid-column:2;grid-row:1;
+    display:flex;justify-content:flex-end;align-self:center;
+  }
+  /* col 1 row 2: BUY */
+  .row > div:nth-child(3){
+    grid-column:1;grid-row:2;
+  }
+  /* col 2 row 2: SELL */
+  .row > div:nth-child(4){
+    grid-column:2;grid-row:2;
+    text-align:right;
+  }
+
+  /* scale down text so numbers don't clip */
+  .cname{font-size:15px}
+  .badge{font-size:11px;padding:2px 7px;margin-left:5px}
+  .wtag{font-size:13px;padding:5px 10px;min-width:unset}
+  .buy-price,.sell-price{font-size:15px}
+  .plbl{font-size:8px}
+
+  /* ── RIGHT PANEL: compact vertical stack ── */
+  .right{height:auto;flex-direction:column;border-top:1px solid var(--border-gold)}
+  .media-area{height:180px;flex:unset}
+  .boxes{flex-direction:row;flex:unset}
+  .box{flex:1;border-right:1px solid var(--border-gold);border-bottom:none;padding:10px 10px}
+  .box:last-child{border-right:none}
+  .spot-pill{font-size:12px;padding:2px 8px}
+  .box-title{font-size:8px}
+  .sent-lbls{font-size:9px}
+
+  /* ── ADMIN PANEL ── */
+  .ap-grid{grid-template-columns:1fr}
+  .ap-row{grid-template-columns:1fr 1fr;gap:6px}
+  .ap-lbl{grid-column:1/-1}
+  .ap-body{padding:16px}
+  .spread-row{flex-wrap:wrap;gap:8px}
+  .spread-lbl{min-width:unset;width:100%;font-size:10px}
+  .spread-input{width:90px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="logo" onclick="window.location.href='/admin.html'" style="cursor:pointer">
+    <img src="/logo.png" alt="Transgold Markets"
+         onerror="this.style.display='none';document.getElementById('fallbackLogo').style.display='flex'">
+    <div id="fallbackLogo" style="display:none;align-items:center;gap:10px">
+      <svg width="44" height="44" viewBox="0 0 32 32" fill="none">
+        <rect x="3" y="4" width="7" height="24" rx="2" fill="#D4A94A" opacity=".9"/>
+        <rect x="12" y="9" width="7" height="19" rx="2" fill="#D4A94A" opacity=".6"/>
+        <rect x="22" y="14" width="6" height="14" rx="2" fill="#D4A94A" opacity=".35"/>
+      </svg>
+      <div class="logo-text">
+        <div class="logo-name">TR<span style="color:#6A500F">&#11045;</span>NSGOLD</div>
+        <div class="logo-sub">Markets &middot; Dubai, UAE</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hdr-mid">
+    <div class="spot-item">
+      <span class="spot-lbl">Gold / USD &middot; oz</span>
+      <span class="spot-val" id="hGold">4,046.73</span>
+      <span class="spot-chg up">&#9650; 0.68</span>
+    </div>
+    <div class="live-badge"><span class="dot"></span>LIVE</div>
+    <div class="spot-item">
+      <span class="spot-lbl">Silver / USD &middot; oz</span>
+      <span class="spot-val" id="hSilver">58.08</span>
+      <span class="spot-chg up">&#9650; 0.02</span>
+    </div>
+  </div>
+
+  <div class="hdr-time">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="dateline" id="dateline">---</div>
+  </div>
+
+
+</header>
+
+<!-- Admin button — fixed, right side below header -->
+<div style="position:fixed;right:16px;top:98px;z-index:500">
+
+</div>
+
+<div class="body">
+  <div class="prices">
+    <div>
+      <div class="sec-title" style="color:var(--gold)">
+        <span class="sec-dot gold-dot"></span>GOLD &mdash; AED PER UNIT
+        <span class="live-badge" style="margin-left:auto"><span class="dot"></span>LIVE</span>
+      </div>
+      <div class="tbl-head"><span>COMMODITY</span><span>WEIGHT</span><span>BUY</span><span>SELL</span></div>
+      <div id="goldRows"></div>
+    </div>
+    <div>
+      <div class="sec-title" style="color:var(--silver)">
+        <span class="sec-dot silver-dot"></span>SILVER &mdash; AED PER UNIT
+      </div>
+      <div class="tbl-head"><span>COMMODITY</span><span>WEIGHT</span><span>BUY</span><span>SELL</span></div>
+      <div id="silverRows"></div>
+    </div>
+  </div>
+
+  <div class="right" id="rightPanel">
+    <div class="media-area" id="mediaArea">
+      <div class="no-media" id="noMedia">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <rect x="3" y="9" width="38" height="28" rx="4" stroke="#22C55E" stroke-width="1.5"/>
+          <path d="M3 18l10-8 8 6 8-9 13 11" stroke="#22C55E" stroke-width="1.2" fill="none"/>
+          <circle cx="12" cy="16" r="3" stroke="#22C55E" stroke-width="1.2"/>
+        </svg>
+        <span>Media Panel</span>
+        <span style="font-size:8px;opacity:.5">Add image or video via Admin</span>
+      </div>
+    </div>
+    <div class="boxes">
+      <div class="box">
+        <div class="box-title"><span class="btdot" style="background:var(--gold)"></span>GOLD / USD&middot;OZ</div>
+        <div class="spot-row"><span class="spot-row-lbl">BUY</span><span class="spot-pill gpill" id="bGoldBuy">4,046.73</span></div>
+        <div class="spot-row"><span class="spot-row-lbl">SELL</span><span class="spot-pill rpill" id="bGoldSell">4,047.73</span></div>
+        <div class="chg-line up" id="bGoldChg">&#9650; 1.55</div>
+      </div>
+      <div class="box">
+        <div class="box-title"><span class="btdot" style="background:var(--silver)"></span>SILVER / USD&middot;OZ</div>
+        <div class="spot-row"><span class="spot-row-lbl">BUY</span><span class="spot-pill gpill" id="bSilverBuy">58.08</span></div>
+        <div class="spot-row"><span class="spot-row-lbl">SELL</span><span class="spot-pill rpill" id="bSilverSell">58.11</span></div>
+        <div class="chg-line up" id="bSilverChg">&#9650; 0.03</div>
+      </div>
+      <div class="box">
+        <div class="box-title">MARKET SENTIMENT</div>
+        <div class="sent-bar-bg"><div class="sent-bar" id="sentBar" style="width:65%"></div></div>
+        <div class="sent-lbls"><span class="b" id="sentBuyers">BUYERS 65%</span><span class="s" id="sentSellers">SELLERS 35%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TradingView Ticker Tape -->
+<div style="height:46px;flex-shrink:0">
+  <div class="tradingview-widget-container" style="height:46px">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+      "symbols": [
+        {"proName":"FOREXCOM:XAUUSD","title":"Gold"},
+        {"proName":"FOREXCOM:XAGUSD","title":"Silver"},
+        {"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},
+        {"proName":"FX:EURUSD","title":"EUR/USD"},
+        {"proName":"FX:GBPUSD","title":"GBP/USD"},
+        {"proName":"FOREXCOM:XPTUSD","title":"Platinum"},
+        {"proName":"TVC:USOIL","title":"Crude Oil"},
+        {"proName":"SP:SPX","title":"S&P 500"},
+        {"proName":"FX:USDJPY","title":"USD/JPY"},
+        {"proName":"FOREXCOM:XPDUSD","title":"Palladium"}
+      ],
+      "showSymbolLogo": false,
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "colorTheme": "dark",
+      "locale": "en"
+    }
+    </script>
+  </div>
+</div>
+
+<!-- ═══════════ ADMIN PANEL OVERLAY ═══════════ -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-panel">
+    <div class="ap-hdr">
+      <div class="ap-title">&#9881; Admin Panel</div>
+      <button class="ap-close" id="adminClose">&#10005;</button>
+    </div>
+    <div style="display:flex;gap:4px;padding:12px 16px 0;border-bottom:1px solid rgba(212,169,74,.12);background:#0d0d0d;">
+      <div class="ap-tab active" onclick="switchTab('prices',this)">PRICES</div>
+      <div class="ap-tab" onclick="switchTab('shop',this)">SHOP INFO</div>
+      <div class="ap-tab" onclick="switchTab('media',this)">MEDIA</div>
+      <div class="ap-tab" onclick="switchTab('orders',this);loadOrders()" id="orders-tab-btn">ORDERS <span id="orders-pending-badge" style="display:none;background:rgba(239,68,68,.8);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:4px">0</span></div>
+    </div>
+    <div class="ap-body">
+      <div id="tab-prices" class="ap-tab-content active">
+      <!-- LIVE PRICE STATUS -->
+      <div class="ap-section">
+        <div class="ap-section-title">&#9632; Live Price Feed</div>
+        <!-- Row 1: Raw Arakkal + Last Updated -->
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 6px">
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:10px;color:var(--muted);letter-spacing:.1em">GOLD (XAU/USD)</span>
+              <span id="apLiveGold" style="font-size:16px;font-weight:700;color:var(--gold)">—</span>
+              <span style="font-size:9px;color:var(--muted)">(Arakkal)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:10px;color:var(--muted);letter-spacing:.1em">SILVER (XAG/USD)</span>
+              <span id="apLiveSilver" style="font-size:16px;font-weight:700;color:var(--silver)">—</span>
+              <span style="font-size:9px;color:var(--muted)">(Arakkal)</span>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:.1em">LAST UPDATED</div>
+            <div id="apLastUpdate" style="font-size:11px;color:var(--green);margin-top:3px">Waiting for API…</div>
+          </div>
+        </div>
+        <!-- Row 1b: Spread-adjusted USD/oz -->
+        <div style="display:flex;gap:16px;padding:6px 0 8px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:10px;color:var(--muted);letter-spacing:.1em">GOLD WITH SPREAD</span>
+            <span id="apSpreadGold" style="font-size:16px;font-weight:700;color:var(--gold)">—</span>
+            <span style="font-size:9px;color:var(--muted)">USD/oz</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:10px;color:var(--muted);letter-spacing:.1em">SILVER WITH SPREAD</span>
+            <span id="apSpreadSilver" style="font-size:16px;font-weight:700;color:var(--silver)">—</span>
+            <span style="font-size:9px;color:var(--muted)">USD/oz</span>
+          </div>
+        </div>
+        <!-- Row 2: After spread board prices -->
+        <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:.1em;margin-bottom:8px">BOARD PRICES AFTER SPREAD  ·  BUY = ASK  |  SELL = BID</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px">GOLD 999·1GM (AED)</div>
+              <div style="display:flex;gap:10px;align-items:baseline">
+                <div>
+                  <div style="font-size:9px;color:#4ade80">BUY</div>
+                  <div style="font-size:15px;font-weight:700;color:#4ade80" id="apAfterGoldBuy">—</div>
+                </div>
+                <div style="color:var(--muted);font-size:12px">/</div>
+                <div>
+                  <div style="font-size:9px;color:#f87171">SELL</div>
+                  <div style="font-size:15px;font-weight:700;color:#f87171" id="apAfterGoldSell">—</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--muted);margin-bottom:4px">SILVER 999·1KG (AED)</div>
+              <div style="display:flex;gap:10px;align-items:baseline">
+                <div>
+                  <div style="font-size:9px;color:#4ade80">BUY</div>
+                  <div style="font-size:15px;font-weight:700;color:#4ade80" id="apAfterSilverBuy">—</div>
+                </div>
+                <div style="color:var(--muted);font-size:12px">/</div>
+                <div>
+                  <div style="font-size:9px;color:#f87171">SELL</div>
+                  <div style="font-size:15px;font-weight:700;color:#f87171" id="apAfterSilverSell">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BID / ASK — GOLD MASTER -->
+      <div class="ap-section">
+        <div class="ap-section-title">&#9632; Gold — Master Offset <span style="font-size:10px;color:var(--gold);font-weight:400">(AED per gram · based on 24K 999·1GM)</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px">
+          <div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px">&#9660; BID — We Buy from Customer (SELL price)</div>
+            <input type="number" class="spread-input" id="masterGoldBid" oninput="updateAdminPreviews()" value="-5" step="0.5" style="width:100%;font-size:15px;padding:10px 8px">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px">&#9650; ASK — We Sell to Customer (BUY price)</div>
+            <input type="number" class="spread-input" id="masterGoldAsk" oninput="updateAdminPreviews()" value="5" step="0.5" style="width:100%;font-size:15px;padding:10px 8px">
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);background:rgba(255,255,255,0.04);padding:6px 8px;border-radius:4px">
+          Set offset for 24K 999·1GM &nbsp;·&nbsp; auto-scales: 1KG=×1000 &nbsp;·&nbsp; 916GM=×0.916 &nbsp;·&nbsp; TTB=×116.64
+        </div>
+      </div>
+
+      <!-- GOLD LIVE SUMMARY TABLE -->
+      <div class="ap-section">
+        <div class="ap-section-title">&#9632; Gold — Live Breakdown (auto from master)</div>
+        <div style="display:flex;flex-direction:column;gap:4px;font-size:11px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:4px 6px;color:var(--muted);font-size:9px;letter-spacing:.05em">
+            <span>ROW</span><span style="text-align:right">SELL (BID)</span><span style="text-align:right">BUY (ASK)</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:5px 6px;background:rgba(255,255,255,0.03);border-radius:4px">
+            <span>9999·1KG</span><span style="text-align:right;color:#f87171" id="sum_bid_gold_0">—</span><span style="text-align:right;color:#4ade80" id="sum_ask_gold_0">—</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:5px 6px;background:rgba(255,255,255,0.03);border-radius:4px">
+            <span>995·1KG</span><span style="text-align:right;color:#f87171" id="sum_bid_gold_1">—</span><span style="text-align:right;color:#4ade80" id="sum_ask_gold_1">—</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:5px 6px;background:rgba(255,255,255,0.03);border-radius:4px">
+            <span>916·1GM</span><span style="text-align:right;color:#f87171" id="sum_bid_gold_2">—</span><span style="text-align:right;color:#4ade80" id="sum_ask_gold_2">—</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:5px 6px;background:rgba(255,255,255,0.03);border-radius:4px">
+            <span>999·1GM</span><span style="text-align:right;color:#f87171" id="sum_bid_gold_3">—</span><span style="text-align:right;color:#4ade80" id="sum_ask_gold_3">—</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:5px 6px;background:rgba(255,255,255,0.03);border-radius:4px">
+            <span>1TB·TTB</span><span style="text-align:right;color:#f87171" id="sum_bid_gold_4">—</span><span style="text-align:right;color:#4ade80" id="sum_ask_gold_4">—</span>
+          </div>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:6px">Rows with a custom override (checked below) show their own value here too</div>
+      </div>
+
+      <!-- GOLD ROW OVERRIDES -->
+      <div class="ap-section">
+        <div class="ap-section-title">&#9632; Gold — Custom Row Override</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:10px">Tick a row to set its own BID / ASK instead of master</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+
+          <div style="display:grid;grid-template-columns:16px 80px 1fr 1fr;gap:8px;align-items:center;padding:8px;background:rgba(255,255,255,0.04);border-radius:6px">
+            <input type="checkbox" id="ovr_gold_0" onchange="syncOverrideInputs('gold',0);updateAdminPreviews()" style="accent-color:var(--gold)">
+            <span style="font-size:11px;font-weight:600;color:var(--gold)">9999·1KG</span>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">BID (We Buy / SELL price)</div><input type="number" class="spread-input" id="ovrBid_gold_0" oninput="updateAdminPreviews()" value="0" step="100" disabled style="width:100%"></div>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">ASK (We Sell / BUY price)</div><input type="number" class="spread-input" id="ovrAsk_gold_0" oninput="updateAdminPreviews()" value="0" step="100" disabled style="width:100%"></div>
+            <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:16px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.06);margin-top:2px">
+              <span style="font-size:10px;color:var(--muted)">BOARD PRICE →</span>
+              <span style="font-size:11px;font-weight:700;color:#4ade80" id="prev_buy_gold_0">—</span>
+              <span style="font-size:10px;color:var(--muted)">/</span>
+              <span style="font-size:11px;font-weight:700;color:#f87171" id="prev_sell_gold_0">—</span>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:16px 80px 1fr 1fr;gap:8px;align-items:center;padding:8px;background:rgba(255,255,255,0.04);border-radius:6px">
+            <input type="checkbox" id="ovr_gold_1" onchange="syncOverrideInputs('gold',1);updateAdminPreviews()" style="accent-color:var(--gold)">
+            <span style="font-size:11px;font-weight:600;color:var(--gold)">995·1KG</span>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">BID (We Buy / SELL price)</div><input type="number" class="spread-input" id="ovrBid_gold_1" oninput="updateAdminPreviews()" value="0" step="100" disabled style="width:100%"></div>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">ASK (We Sell / BUY price)</div><input type="number" class="spread-input" id="ovrAsk_gold_1" oninput="updateAdminPreviews()" value="0" step="100" disabled style="width:100%"></div>
+            <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:16px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.06);margin-top:2px">
+              <span style="font-size:10px;color:var(--muted)">BOARD PRICE →</span>
+              <span style="font-size:11px;font-weight:700;color:#4ade80" id="prev_buy_gold_1">—</span>
+              <span style="font-size:10px;color:var(--muted)">/</span>
+              <span style="font-size:11px;font-weight:700;color:#f87171" id="prev_sell_gold_1">—</span>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:16px 80px 1fr 1fr;gap:8px;align-items:center;padding:8px;background:rgba(255,255,255,0.04);border-radius:6px">
+            <input type="checkbox" id="ovr_gold_2" onchange="syncOverrideInputs('gold',2);updateAdminPreviews()" style="accent-color:var(--gold)">
+            <span style="font-size:11px;font-weight:600;color:var(--gold)">916·1GM</span>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">BID (We Buy / SELL price)</div><input type="number" class="spread-input" id="ovrBid_gold_2" oninput="updateAdminPreviews()" value="0" step="0.5" disabled style="width:100%"></div>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">ASK (We Sell / BUY price)</div><input type="number" class="spread-input" id="ovrAsk_gold_2" oninput="updateAdminPreviews()" value="0" step="0.5" disabled style="width:100%"></div>
+            <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:16px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.06);margin-top:2px">
+              <span style="font-size:10px;color:var(--muted)">BOARD PRICE →</span>
+              <span style="font-size:11px;font-weight:700;color:#4ade80" id="prev_buy_gold_2">—</span>
+              <span style="font-size:10px;color:var(--muted)">/</span>
+              <span style="font-size:11px;font-weight:700;color:#f87171" id="prev_sell_gold_2">—</span>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:16px 80px 1fr 1fr;gap:8px;align-items:center;padding:8px;background:rgba(255,255,255,0.04);border-radius:6px">
+            <input type="checkbox" id="ovr_gold_3" onchange="syncOverrideInputs('gold',3);updateAdminPreviews()" style="accent-color:var(--gold)">
+            <span style="font-size:11px;font-weight:600;color:var(--gold)">999·1GM</span>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">BID (We Buy / SELL price)</div><input type="number" class="spread-input" id="ovrBid_gold_3" oninput="updateAdminPreviews()" value="0" step="0.5" disabled style="width:100%"></div>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">ASK (We Sell / BUY price)</div><input type="number" class="spread-input" id="ovrAsk_gold_3" oninput="updateAdminPreviews()" value="0" step="0.5" disabled style="width:100%"></div>
+            <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:16px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.06);margin-top:2px">
+              <span style="font-size:10px;color:var(--muted)">BOARD PRICE →</span>
+              <span style="font-size:11px;font-weight:700;color:#4ade80" id="prev_buy_gold_3">—</span>
+              <span style="font-size:10px;color:var(--muted)">/</span>
+              <span style="font-size:11px;font-weight:700;color:#f87171" id="prev_sell_gold_3">—</span>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:16px 80px 1fr 1fr;gap:8px;align-items:center;padding:8px;background:rgba(255,255,255,0.04);border-radius:6px">
+            <input type="checkbox" id="ovr_gold_4" onchange="syncOverrideInputs('gold',4);updateAdminPreviews()" style="accent-color:var(--gold)">
+            <span style="font-size:11px;font-weight:600;color:var(--gold)">1TB·TTB</span>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">BID (We Buy / SELL price)</div><input type="number" class="spread-input" id="ovrBid_gold_4" oninput="updateAdminPreviews()" value="0" step="10" disabled style="width:100%"></div>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">ASK (We Sell / BUY price)</div><input type="number" class="spread-input" id="ovrAsk_gold_4" oninput="updateAdminPreviews()" value="0" step="10" disabled style="width:100%"></div>
+            <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:16px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.06);margin-top:2px">
+              <span style="font-size:10px;color:var(--muted)">BOARD PRICE →</span>
+              <span style="font-size:11px;font-weight:700;color:#4ade80" id="prev_buy_gold_4">—</span>
+              <span style="font-size:10px;color:var(--muted)">/</span>
+              <span style="font-size:11px;font-weight:700;color:#f87171" id="prev_sell_gold_4">—</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- BID / ASK — SILVER MASTER -->
+      <div class="ap-section">
+        <div class="ap-section-title">&#9632; Silver — Master Offset <span style="font-size:10px;color:var(--gold);font-weight:400">(AED per gram · 999 pure)</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px">
+          <div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px">&#9660; BID — We Buy from Customer (SELL price)</div>
+            <input type="number" class="spread-input" id="masterSilverBid" oninput="updateAdminPreviews()" value="-0.5" step="0.1" style="width:100%;font-size:15px;padding:10px 8px">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px">&#9650; ASK — We Sell to Customer (BUY price)</div>
+            <input type="number" class="spread-input" id="masterSilverAsk" oninput="updateAdminPreviews()" value="0.5" step="0.1" style="width:100%;font-size:15px;padding:10px 8px">
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);background:rgba(255,255,255,0.04);padding:6px 8px;border-radius:4px">
+          Auto-scales to all rows &nbsp;·&nbsp; 1KG = ×1000 &nbsp;·&nbsp; TTB = ×116.64
+        </div>
+      </div>
+
+      <!-- SILVER LIVE SUMMARY TABLE -->
+      <div class="ap-section">
+        <div class="ap-section-title">&#9632; Silver — Live Breakdown (auto from master)</div>
+        <div style="display:flex;flex-direction:column;gap:4px;font-size:11px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:4px 6px;color:var(--muted);font-size:9px;letter-spacing:.05em">
+            <span>ROW</span><span style="text-align:right">SELL (BID)</span><span style="text-align:right">BUY (ASK)</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:5px 6px;background:rgba(255,255,255,0.03);border-radius:4px">
+            <span>999·1KG</span><span style="text-align:right;color:#f87171" id="sum_bid_silver_0">—</span><span style="text-align:right;color:#4ade80" id="sum_ask_silver_0">—</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:5px 6px;background:rgba(255,255,255,0.03);border-radius:4px">
+            <span>999·TTB</span><span style="text-align:right;color:#f87171" id="sum_bid_silver_1">—</span><span style="text-align:right;color:#4ade80" id="sum_ask_silver_1">—</span>
+          </div>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:6px">Rows with a custom override (checked below) show their own value here too</div>
+      </div>
+
+      <!-- SILVER ROW OVERRIDES -->
+      <div class="ap-section">
+        <div class="ap-section-title">&#9632; Silver — Custom Row Override</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:10px">Tick a row to set its own BID / ASK instead of master</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+
+          <div style="display:grid;grid-template-columns:16px 80px 1fr 1fr;gap:8px;align-items:center;padding:8px;background:rgba(255,255,255,0.04);border-radius:6px">
+            <input type="checkbox" id="ovr_silver_0" onchange="syncOverrideInputs('silver',0)" style="accent-color:var(--gold)">
+            <span style="font-size:11px;font-weight:600;color:var(--gold)">999·1KG</span>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">BID (We Buy / SELL price)</div><input type="number" class="spread-input" id="ovrBid_silver_0" oninput="updateAdminPreviews()" value="0" step="10" disabled style="width:100%"></div>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">ASK (We Sell / BUY price)</div><input type="number" class="spread-input" id="ovrAsk_silver_0" oninput="updateAdminPreviews()" value="0" step="10" disabled style="width:100%"></div>
+            <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:16px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.06);margin-top:2px">
+              <span style="font-size:10px;color:var(--muted)">BOARD PRICE →</span>
+              <span style="font-size:11px;font-weight:700;color:#4ade80" id="prev_buy_silver_0">—</span>
+              <span style="font-size:10px;color:var(--muted)">/</span>
+              <span style="font-size:11px;font-weight:700;color:#f87171" id="prev_sell_silver_0">—</span>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:16px 80px 1fr 1fr;gap:8px;align-items:center;padding:8px;background:rgba(255,255,255,0.04);border-radius:6px">
+            <input type="checkbox" id="ovr_silver_1" onchange="syncOverrideInputs('silver',1)" style="accent-color:var(--gold)">
+            <span style="font-size:11px;font-weight:600;color:var(--gold)">999·TTB</span>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">BID (We Buy / SELL price)</div><input type="number" class="spread-input" id="ovrBid_silver_1" oninput="updateAdminPreviews()" value="0" step="1" disabled style="width:100%"></div>
+            <div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">ASK (We Sell / BUY price)</div><input type="number" class="spread-input" id="ovrAsk_silver_1" oninput="updateAdminPreviews()" value="0" step="1" disabled style="width:100%"></div>
+            <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:16px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.06);margin-top:2px">
+              <span style="font-size:10px;color:var(--muted)">BOARD PRICE →</span>
+              <span style="font-size:11px;font-weight:700;color:#4ade80" id="prev_buy_silver_1">—</span>
+              <span style="font-size:10px;color:var(--muted)">/</span>
+              <span style="font-size:11px;font-weight:700;color:#f87171" id="prev_sell_silver_1">—</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SAVE BUTTON -->
+      </div><!-- end tab-prices -->
+      <div id="tab-shop" class="ap-tab-content">
+      <div class="ap-section">
+        <div class="ap-section-title">&#9632; Shop Info — Contact Details</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">SHOP NAME</div>
+            <input class="ap-input" id="shopName" placeholder="Transgold Markets" />
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">TAGLINE</div>
+            <input class="ap-input" id="shopTagline" placeholder="Your Trusted Gold & Silver Trading Partner" />
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">WHATSAPP (with +971)</div>
+            <input class="ap-input" id="shopWhatsapp" placeholder="+971500000000" />
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">PHONE</div>
+            <input class="ap-input" id="shopPhone" placeholder="+97140000000" />
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">EMAIL</div>
+            <input class="ap-input" id="shopEmail" placeholder="info@transgoldmarkets.com" />
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">ADDRESS</div>
+            <input class="ap-input" id="shopAddress" placeholder="Gold Souk, Deira, Dubai, UAE" />
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">GOOGLE MAPS URL</div>
+            <input class="ap-input" id="shopMaps" placeholder="https://maps.google.com/..." />
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">TRADING HOURS — ROW 1</div>
+            <input class="ap-input" id="shopHours1Day" placeholder="Monday - Saturday" style="margin-bottom:6px" />
+            <input class="ap-input" id="shopHours1Time" placeholder="9:00 AM - 9:00 PM" />
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">TRADING HOURS — ROW 2</div>
+            <input class="ap-input" id="shopHours2Day" placeholder="Sunday" style="margin-bottom:6px" />
+            <input class="ap-input" id="shopHours2Time" placeholder="10:00 AM - 6:00 PM" />
+          </div>
+          <button class="ap-btn ap-btn-primary" style="width:100%;padding:12px;font-size:12px;margin-top:6px" onclick="saveShopInfo()">&#10003; SAVE SHOP INFO</button>
+          <div id="shopSaveMsg" style="font-size:11px;color:var(--green);text-align:center;display:none">Saved successfully!</div>
+        </div>
+      </div>
+
+      <div class="ap-section" style="border:none">
+        <button class="ap-btn ap-btn-primary" style="width:100%;padding:14px;font-size:13px" onclick="saveSpread()">&#10003; SAVE &amp; APPLY TO BOARD</button>
+      </div>
+
+      <!-- MEDIA -->
+      </div><!-- end tab-shop -->
+      <div id="tab-media" class="ap-tab-content">
+      <div class="ap-section">
+        <div class="ap-section-title">&#9632; Media Slots (up to 3)</div>
+        <div style="display:flex;flex-direction:column;gap:10px" id="mediaSlots"></div>
+        <div style="margin-top:10px">
+          <button class="ap-btn ap-btn-danger" onclick="removeAllMedia()">&#10005; Clear All Media</button>
+        </div>
+      </div>
+
+      </div><!-- end tab-media -->
+      <div id="tab-orders" class="ap-tab-content" style="padding:16px">
+      <div class="ap-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="ap-section-title" style="margin-bottom:0">&#9632; Orders</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select id="orders-filter" onchange="renderOrdersTab()" style="background:#0a0a0a;border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:10px;padding:4px 8px;border-radius:4px;outline:none">
+              <option value="all">ALL</option>
+              <option value="pending">PENDING</option>
+              <option value="approved">APPROVED</option>
+              <option value="completed">COMPLETED</option>
+              <option value="cancelled">CANCELLED</option>
+            </select>
+            <button onclick="loadOrders()" style="background:none;border:1px solid rgba(34,197,94,.3);color:var(--green);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;letter-spacing:.06em">&#8635; REFRESH</button>
+          </div>
+        </div>
+        <!-- Stats row -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px" id="orders-stats">
+          <div style="background:var(--bg3);border:1px solid rgba(212,169,74,.1);border-radius:8px;padding:10px 12px">
+            <div style="font-size:18px;font-weight:800;color:var(--gold)" id="ostat-total">—</div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:.1em;margin-top:2px">TOTAL</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:10px 12px">
+            <div style="font-size:18px;font-weight:800;color:#fbbf24" id="ostat-pending">—</div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:.1em;margin-top:2px">PENDING</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:10px 12px">
+            <div style="font-size:18px;font-weight:800;color:var(--green)" id="ostat-approved">—</div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:.1em;margin-top:2px">APPROVED</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:10px 12px">
+            <div style="font-size:18px;font-weight:800;color:var(--text)" id="ostat-value" style="font-size:13px">—</div>
+            <div style="font-size:9px;color:var(--muted);letter-spacing:.1em;margin-top:2px">AED VALUE</div>
+          </div>
+        </div>
+        <!-- Orders list -->
+        <div id="orders-list" style="display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto">
+          <div style="text-align:center;padding:30px;color:var(--muted);font-size:12px">Click REFRESH to load orders</div>
+        </div>
+      </div>
+      </div><!-- end tab-orders -->
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)">
+        <button class="ap-btn ap-btn-outline" onclick="closeAdmin()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ap-toast" id="toast"></div>
+
+<script>
+const PRICES={
+  gold:[
+    {purity:'9999',weight:'1 KG', buy:0,sell:0},
+    {purity:'995', weight:'1 KG', buy:0,sell:0},
+    {purity:'916', weight:'1 GM', buy:0,sell:0},
+    {purity:'999', weight:'1 GM', buy:0,sell:0},
+    {purity:'1TB', weight:'1 TTB',buy:0,sell:0},
+  ],
+  silver:[
+    {purity:'999',weight:'1 KG', buy:0,sell:0},
+    {purity:'999',weight:'1 TTB',buy:0,sell:0},
+  ]
+};
+
+
+function fmt(n){return n.toLocaleString('en-AE',{minimumFractionDigits:2,maximumFractionDigits:2})}
+
+function renderRows(items,id,type){
+  document.getElementById(id).innerHTML=items.map(item=>`
+    <div class="row ${type==='gold'?'grow':'srow'}">
+      <div><span class="cname">${type==='gold'?'Gold':'Silver'}</span><span class="badge ${type==='gold'?'gbadge':'sbadge'}">${item.purity}</span></div>
+      <div><span class="wtag">${item.weight}</span></div>
+      <div><span class="plbl">BUY</span><span class="buy-price">${fmt(item.buy)}</span></div>
+      <div><span class="plbl">SELL</span><span class="sell-price">${fmt(item.sell)}</span></div>
+    </div>`).join('');
+}
+
+// ── BID / ASK CONFIG ────────────────────────────────────────────────────────
+// buy  = mid + BID  (BID is usually negative, e.g. -5)
+// sell = mid + ASK  (ASK is usually positive, e.g. +5)
+const PURITY = {
+  gold: [1.0, 0.995, 0.916, 0.999, 1.0]
+};
+
+// Master per-gram offsets (AED/gm). Applied to all rows by weight.
+let MASTER = { goldBid: -5, goldAsk: 5, silverBid: -0.5, silverAsk: 0.5 };
+
+// Per-row override flags and values (null = use master)
+let OVERRIDE = {
+  gold:   [null, null, null, null, null],   // null = auto from master
+  silver: [null, null]
+};
+
+// Computed BID/ASK per row (filled by applyMaster)
+let BID = { gold: [0,0,0,0,0], silver: [0,0] };
+let ASK = { gold: [0,0,0,0,0], silver: [0,0] };
+
+// Weight multipliers: how many troy oz per unit
+// 1 troy oz = 31.1035g
+const WEIGHT = {
+  gold:   [32.1507, 32.1507, 0.032151, 0.032151, 3.7500], // 9999·1KG, 995·1KG, 916·1GM, 999·1GM, 1TB·TTB
+  silver: [32.1507, 3.7500]                                 // 1KG, 1TTB
+};
+const AED = 3.6725; // USD→AED fixed rate (will come from API later)
+
+// Spot prices — will be replaced by API; fallback hardcoded
+let spotUSD = { gold: 4046.73, silver: 58.08 };
+
+// Weight in grams per unit (for master per-gram calculation)
+const WEIGHT_GM = {
+  gold:   [1000, 1000, 1, 1, 116.64],
+  silver: [1000, 116.64]
+};
+
+function applyMaster() {
+  // Master is set in AED per gram of 24K 999 gold.
+  // For each row: scale by weight (grams), then apply purity ratio vs 999 (=1.0 base).
+  // 9999=1.0, 995=0.995, 916=0.916, 999=0.999, 1TB=1.0 (fine gold tola)
+  ['gold','silver'].forEach(type => {
+    BID[type].forEach((_, i) => {
+      if (OVERRIDE[type][i] !== null) {
+        BID[type][i] = OVERRIDE[type][i].bid;
+        ASK[type][i] = OVERRIDE[type][i].ask;
+      } else {
+        const wg = WEIGHT_GM[type][i];
+        // Gold: scale by purity relative to 24K(999). Silver: no purity factor.
+        const purity = (type === 'gold') ? (PURITY.gold[i] || 1.0) : 1.0;
+        BID[type][i] = MASTER[type+'Bid'] * wg * purity;
+        ASK[type][i] = MASTER[type+'Ask'] * wg * purity;
+      }
+    });
+  });
+}
+
+function calcPrices() {
+  applyMaster();
+  PRICES.gold.forEach((item, i) => {
+    const purity = PURITY.gold[i] !== undefined ? PURITY.gold[i] : 1.0;
+    const mid = spotUSD.gold * WEIGHT.gold[i] * AED * purity;
+    item.buy  = mid + ASK.gold[i];
+    item.sell = mid + BID.gold[i];
+  });
+  PRICES.silver.forEach((item, i) => {
+    const mid = spotUSD.silver * WEIGHT.silver[i] * AED;
+    item.buy  = mid + ASK.silver[i];
+    item.sell = mid + BID.silver[i];
+  });
+}
+
+function updateAdminPreviews() {
+  // Read live master values straight from the input fields (do NOT rely on saved MASTER global)
+  const liveMaster = {
+    goldBid:   parseFloat(document.getElementById('masterGoldBid').value)   || 0,
+    goldAsk:   parseFloat(document.getElementById('masterGoldAsk').value)   || 0,
+    silverBid: parseFloat(document.getElementById('masterSilverBid').value) || 0,
+    silverAsk: parseFloat(document.getElementById('masterSilverAsk').value) || 0,
+  };
+
+  // Update live breakdown summary tables (Gold + Silver) using LIVE input values
+  ['gold','silver'].forEach(type => {
+    const count = type === 'gold' ? 5 : 2;
+    for (let i = 0; i < count; i++) {
+      const wg = WEIGHT_GM[type][i];
+      const purity = (type === 'gold') ? (PURITY.gold[i] || 1.0) : 1.0;
+      const chk = document.getElementById('ovr_'+type+'_'+i);
+      let bidVal, askVal;
+      if (chk && chk.checked) {
+        bidVal = parseFloat(document.getElementById('ovrBid_'+type+'_'+i).value) || 0;
+        askVal = parseFloat(document.getElementById('ovrAsk_'+type+'_'+i).value) || 0;
+      } else {
+        bidVal = liveMaster[type+'Bid'] * wg * purity;
+        askVal = liveMaster[type+'Ask'] * wg * purity;
+      }
+      const bidEl = document.getElementById('sum_bid_'+type+'_'+i);
+      const askEl = document.getElementById('sum_ask_'+type+'_'+i);
+      if (bidEl) bidEl.textContent = bidVal.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+      if (askEl) askEl.textContent = ('+'+askVal.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})).replace('+-','-');
+    }
+  });
+
+  // Reuse liveMaster (already computed above) for the per-row BOARD PRICE preview
+  const tmpMaster = liveMaster;
+  const fmt2 = v => v.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+  [['gold',5],['silver',2]].forEach(([type, count]) => {
+    for (let i = 0; i < count; i++) {
+      const chk = document.getElementById('ovr_'+type+'_'+i);
+      const wt  = WEIGHT[type][i];
+      const wg  = WEIGHT_GM[type][i];
+      const pur = (type==='gold' && PURITY.gold[i]) ? PURITY.gold[i] : 1.0;
+      const spot = type==='gold' ? spotUSD.gold : spotUSD.silver;
+      const mid = spot * wt * AED * pur;
+      let bid, ask;
+      if (chk && chk.checked) {
+        bid = parseFloat(document.getElementById('ovrBid_'+type+'_'+i).value) || 0;
+        ask = parseFloat(document.getElementById('ovrAsk_'+type+'_'+i).value) || 0;
+      } else {
+        // Same logic as applyMaster: weight × purity
+        bid = tmpMaster[type+'Bid'] * wg * pur;
+        ask = tmpMaster[type+'Ask'] * wg * pur;
+      }
+      const buyEl  = document.getElementById('prev_buy_'+type+'_'+i);
+      const sellEl = document.getElementById('prev_sell_'+type+'_'+i);
+      if (buyEl)  buyEl.textContent  = fmt2(mid + bid);
+      if (sellEl) sellEl.textContent = fmt2(mid + ask);
+    }
+  });
+}
+
+function saveSpread() {
+  // Save master per-gram values
+  MASTER.goldBid   = parseFloat(document.getElementById('masterGoldBid').value)   || 0;
+  MASTER.goldAsk   = parseFloat(document.getElementById('masterGoldAsk').value)   || 0;
+  MASTER.silverBid = parseFloat(document.getElementById('masterSilverBid').value) || 0;
+  MASTER.silverAsk = parseFloat(document.getElementById('masterSilverAsk').value) || 0;
+
+  // Save per-row overrides
+  const goldLabels   = ['9999·1KG','995·1KG','916·1GM','999·1GM','1TB·1TTB'];
+  const silverLabels = ['999·1KG','999·1TTB'];
+  [['gold',5],['silver',2]].forEach(([type, count]) => {
+    for (let i = 0; i < count; i++) {
+      const chk = document.getElementById('ovr_'+type+'_'+i);
+      if (chk && chk.checked) {
+        const bid = parseFloat(document.getElementById('ovrBid_'+type+'_'+i).value);
+        const ask = parseFloat(document.getElementById('ovrAsk_'+type+'_'+i).value);
+        OVERRIDE[type][i] = { bid, ask };
+      } else {
+        OVERRIDE[type][i] = null;
+      }
+    }
+  });
+
+  calcPrices();
+  renderRows(PRICES.gold,   'goldRows',   'gold');
+  renderRows(PRICES.silver, 'silverRows', 'silver');
+
+  // Persist to server so all devices sync
+  fetch('save_spread.php', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ master: MASTER, override: OVERRIDE })
+  }).then(r=>r.json()).then(d=>{
+    toast(d.ok ? '✓ Saved — all devices updated' : '⚠ Save failed');
+  }).catch(()=>toast('⚠ Could not reach server'));
+  closeAdmin();
+}
+
+function syncOverrideInputs(type, i) {
+  const chk = document.getElementById('ovr_'+type+'_'+i);
+  const bidEl = document.getElementById('ovrBid_'+type+'_'+i);
+  const askEl = document.getElementById('ovrAsk_'+type+'_'+i);
+  if (!chk || !bidEl || !askEl) return;
+  bidEl.disabled = !chk.checked;
+  askEl.disabled = !chk.checked;
+  if (!chk.checked) {
+    // auto-fill computed value from master
+    applyMaster();
+    bidEl.value = BID[type][i].toFixed(2);
+    askEl.value = ASK[type][i].toFixed(2);
+  }
+}
+
+function updateAdminLivePrices() {
+  const el = document.getElementById('apLiveGold');
+  const es = document.getElementById('apLiveSilver');
+  if (el) el.textContent = '$' + spotUSD.gold.toLocaleString('en', {minimumFractionDigits:3,maximumFractionDigits:3});
+  if (es) es.textContent = '$' + spotUSD.silver.toLocaleString('en', {minimumFractionDigits:3,maximumFractionDigits:3});
+  // Spread-adjusted USD/oz in admin
+  const esg = document.getElementById('apSpreadGold');
+  const ess = document.getElementById('apSpreadSilver');
+  const gSpreadOZ = spotUSD.gold   + (MASTER.goldAsk  * WEIGHT_GM.gold[0])   / (WEIGHT.gold[0]   * AED * PURITY.gold[0]);
+  const sSpreadOZ = spotUSD.silver + (MASTER.silverAsk * WEIGHT_GM.silver[0]) / (WEIGHT.silver[0] * AED);
+  if (esg) esg.textContent = '$' + gSpreadOZ.toLocaleString('en',{minimumFractionDigits:3,maximumFractionDigits:3});
+  if (ess) ess.textContent = '$' + sSpreadOZ.toLocaleString('en',{minimumFractionDigits:3,maximumFractionDigits:3});
+  // After spread — show 999·1GM gold and 999·1KG silver board prices
+  const fmt2 = v => v.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+  applyMaster();
+  // Gold 999·1GM is index 3
+  const goldMid  = spotUSD.gold   * WEIGHT.gold[3]   * AED * PURITY.gold[3];
+  const goldBuy  = document.getElementById('apAfterGoldBuy');
+  const goldSell = document.getElementById('apAfterGoldSell');
+  if (goldBuy)  goldBuy.textContent  = fmt2(goldMid + BID.gold[3]);
+  if (goldSell) goldSell.textContent = fmt2(goldMid + ASK.gold[3]);
+  // Silver 999·1KG is index 0
+  const silvMid  = spotUSD.silver * WEIGHT.silver[0] * AED;
+  const silvBuy  = document.getElementById('apAfterSilverBuy');
+  const silvSell = document.getElementById('apAfterSilverSell');
+  if (silvBuy)  silvBuy.textContent  = fmt2(silvMid + BID.silver[0]);
+  if (silvSell) silvSell.textContent = fmt2(silvMid + ASK.silver[0]);
+  const upd = document.getElementById('apLastUpdate');
+  if (upd) upd.textContent = new Date().toLocaleTimeString('en-AE', {hour12:false});
+}
+
+// ── MEDIA SLOTS (server-side persistent storage) ─────────────────────────────
+const MAX_SLOTS = 3;
+let mediaSlots = [null, null, null]; // {url, type, name, filename}
+let slideshowIndex = 0;
+let slideshowTimer = null;
+const SLIDE_DURATION = 5000; // 5s per slide
+const UPLOAD_PHP = '/upload.php';
+
+function renderMediaSlots() {
+  const container = document.getElementById('mediaSlots');
+  container.innerHTML = mediaSlots.map((slot, i) => `
+    <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:10px 12px">
+      <span style="color:var(--muted);font-size:10px;letter-spacing:.1em;min-width:16px">0${i+1}</span>
+      ${slot ? `
+        <span style="flex:1;font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${slot.name}</span>
+        <span style="font-size:9px;color:var(--muted);text-transform:uppercase">${slot.type}</span>
+        <button class="ap-btn ap-btn-danger" style="padding:4px 10px;font-size:10px" onclick="removeSlot(${i})">✕</button>
+      ` : `
+        <label style="flex:1;cursor:pointer;font-size:11px;color:var(--muted)" id="slotLabel${i}">
+          Click to upload image or video
+          <input type="file" accept="image/*,video/*" style="display:none" onchange="handleSlotUpload(event,${i})">
+        </label>
+        <span style="font-size:18px">📷</span>
+      `}
+    </div>`).join('');
+}
+
+async function handleSlotUpload(e, i) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // Show uploading state
+  const label = document.getElementById('slotLabel' + i);
+  if (label) label.textContent = '⏳ Uploading…';
+
+  const fd = new FormData();
+  fd.append('action', 'upload');
+  fd.append('slot', i);
+  fd.append('file', file);
+
+  try {
+    const r   = await fetch(UPLOAD_PHP, { method: 'POST', body: fd });
+    const res = await r.json();
+    if (!res.success) throw new Error(res.error || 'Upload failed');
+    mediaSlots = res.slots;
+    renderMediaSlots();
+    rebuildSlideshow();
+    toast(`✓ Slot ${i+1} saved to server`);
+  } catch (err) {
+    toast('Upload error: ' + err.message, 'err');
+    renderMediaSlots(); // reset label
+  }
+}
+
+async function removeSlot(i) {
+  const fd = new FormData();
+  fd.append('action', 'remove');
+  fd.append('slot', i);
+  try {
+    const r   = await fetch(UPLOAD_PHP, { method: 'POST', body: fd });
+    const res = await r.json();
+    if (!res.success) throw new Error(res.error);
+    mediaSlots = res.slots;
+    renderMediaSlots();
+    rebuildSlideshow();
+    toast(`Slot ${i+1} removed`);
+  } catch (err) {
+    toast('Remove error: ' + err.message, 'err');
+  }
+}
+
+async function removeAllMedia() {
+  const fd = new FormData();
+  fd.append('action', 'clear');
+  try {
+    const r   = await fetch(UPLOAD_PHP, { method: 'POST', body: fd });
+    const res = await r.json();
+    if (!res.success) throw new Error(res.error);
+    mediaSlots = res.slots;
+    renderMediaSlots();
+    rebuildSlideshow();
+    toast('All media cleared');
+  } catch (err) {
+    toast('Clear error: ' + err.message, 'err');
+  }
+}
+
+// Load persisted slots from server on page load
+async function loadServerMedia() {
+  try {
+    const r   = await fetch(UPLOAD_PHP + '?action=list');
+    const res = await r.json();
+    if (res.success && Array.isArray(res.slots)) {
+      mediaSlots = res.slots;
+      rebuildSlideshow();
+    }
+  } catch (e) {
+    console.warn('Could not load media slots from server:', e);
+  }
+}
+
+function rebuildSlideshow() {
+  // clear old
+  clearInterval(slideshowTimer);
+  const area = document.getElementById('mediaArea');
+  area.querySelectorAll('.media-slot').forEach(el => el.remove());
+
+  const active = mediaSlots.filter(Boolean);
+  if (!active.length) {
+    area.classList.remove('active');
+    return;
+  }
+
+  // build slot divs
+  active.forEach((slot, i) => {
+    const div = document.createElement('div');
+    div.className = 'media-slot' + (i === 0 ? ' visible' : '');
+    div.dataset.idx = i;
+    let el;
+    if (slot.type === 'video') {
+      el = document.createElement('video');
+      el.src = slot.url; el.autoplay = true; el.muted = true; el.loop = active.length === 1; el.playsInline = true;
+      // auto-advance on video end if multiple
+      if (active.length > 1) el.addEventListener('ended', nextSlide);
+    } else {
+      el = document.createElement('img');
+      el.src = slot.url; el.alt = slot.name;
+    }
+    div.appendChild(el);
+    area.appendChild(div);
+  });
+
+  area.classList.add('active');
+  slideshowIndex = 0;
+
+  // only auto-timer for images (videos use 'ended')
+  const firstIsImage = active[0].type === 'image';
+  if (active.length > 1 && firstIsImage) {
+    slideshowTimer = setInterval(nextSlide, SLIDE_DURATION);
+  }
+}
+
+function nextSlide() {
+  const slots = document.querySelectorAll('#mediaArea .media-slot');
+  if (slots.length < 2) return;
+  slots[slideshowIndex].classList.remove('visible');
+  // pause current video
+  const curVid = slots[slideshowIndex].querySelector('video');
+  if (curVid) curVid.pause();
+  slideshowIndex = (slideshowIndex + 1) % slots.length;
+  slots[slideshowIndex].classList.add('visible');
+  // play next video
+  const nextVid = slots[slideshowIndex].querySelector('video');
+  if (nextVid) { nextVid.currentTime = 0; nextVid.play(); }
+  // reset timer if next is image
+  clearInterval(slideshowTimer);
+  if (!nextVid) slideshowTimer = setInterval(nextSlide, SLIDE_DURATION);
+}
+
+// Admin open/close
+// Admin accessible via /admin.html directly
+document.getElementById('adminClose').addEventListener('click',closeAdmin);
+document.getElementById('adminOverlay').addEventListener('click',function(e){if(e.target===this)closeAdmin()});
+
+function openAdmin(){
+  setTimeout(updateAdminPreviews, 50);
+  const pw=prompt('Enter admin password:');
+  if(pw!=='admin2024'){toast('Wrong password','err');return;}
+  updateAdminLivePrices();
+  renderMediaSlots();
+  document.getElementById('adminOverlay').classList.add('open');
+}
+function closeAdmin(){document.getElementById('adminOverlay').classList.remove('open')}
+
+function toast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.borderColor=type==='err'?'rgba(239,68,68,.4)':'rgba(34,197,94,.4)';
+  t.style.color=type==='err'?'var(--red)':'var(--green)';
+  t.style.background=type==='err'?'rgba(239,68,68,.1)':'rgba(34,197,94,.1)';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── LIVE PRICE FETCH (metals.dev via PHP proxy) ──────────────────────────────
+async function fetchLivePrices() {
+  try {
+    const r = await fetch('/api/prices.php');
+    const d = await r.json();
+    if (d.ok && d.gold) {
+      const prevGold   = spotUSD.gold;
+      const prevSilver = spotUSD.silver;
+      spotUSD.gold   = d.gold;
+      spotUSD.silver = d.silver;
+      calcPrices();
+      renderRows(PRICES.gold,   'goldRows',   'gold');
+      renderRows(PRICES.silver, 'silverRows', 'silver');
+      const hg = document.getElementById('hGold');
+      const hs = document.getElementById('hSilver');
+      // Header shows spread-adjusted USD/oz (MASTER AED/gram → USD/oz)
+      if (hg) hg.textContent = d.gold.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+      if (hs) hs.textContent = d.silver.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+      const gDiff = (d.gold - prevGold).toFixed(2);
+      const sDiff = (d.silver - prevSilver).toFixed(2);
+      if (hg && hg.nextElementSibling) {
+        const up = parseFloat(gDiff) >= 0;
+        hg.nextElementSibling.textContent = (up ? String.fromCharCode(9650) : String.fromCharCode(9660)) + ' ' + Math.abs(gDiff);
+        hg.nextElementSibling.className = 'spot-chg ' + (up ? 'up' : 'down');
+      }
+      if (hs && hs.nextElementSibling) {
+        const up = parseFloat(sDiff) >= 0;
+        hs.nextElementSibling.textContent = (up ? String.fromCharCode(9650) : String.fromCharCode(9660)) + ' ' + Math.abs(sDiff);
+        hs.nextElementSibling.className = 'spot-chg ' + (up ? 'up' : 'down');
+      }
+      // Sync sidebar chg-line with same diff
+      const bgc = document.getElementById('bGoldChg');
+      const bsc = document.getElementById('bSilverChg');
+      if (bgc) { const up = parseFloat(gDiff)>=0; bgc.textContent=(up?'▲':'▼')+' '+Math.abs(gDiff); bgc.className='chg-line '+(up?'up':'down'); }
+      if (bsc) { const up = parseFloat(sDiff)>=0; bsc.textContent=(up?'▲':'▼')+' '+Math.abs(sDiff); bsc.className='chg-line '+(up?'up':'down'); }
+      updateAdminLivePrices();
+      // update right panel boxes with flash effect
+      const flash = el => { el.style.transition='background 0.1s'; el.style.background='rgba(212,169,74,0.6)'; setTimeout(()=>{el.style.transition='background 0.6s';el.style.background='';},300); };
+      const bg = document.getElementById('bGoldBuy');
+      const bgs = document.getElementById('bGoldSell');
+      const bs = document.getElementById('bSilverBuy');
+      const bss = document.getElementById('bSilverSell');
+      // Sidebar shows USD/oz with spread applied
+      const fmt3 = v => v.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+      const gBuyUSD  = d.gold + (MASTER.goldAsk  * WEIGHT_GM.gold[0]) / (WEIGHT.gold[0] * AED * PURITY.gold[0]);
+      const gSellUSD = d.gold + (MASTER.goldBid  * WEIGHT_GM.gold[0]) / (WEIGHT.gold[0] * AED * PURITY.gold[0]);
+      const sBuyUSD  = d.silver + (MASTER.silverAsk  * WEIGHT_GM.silver[0]) / (WEIGHT.silver[0] * AED);
+      const sSellUSD = d.silver + (MASTER.silverBid  * WEIGHT_GM.silver[0]) / (WEIGHT.silver[0] * AED);
+      if (bg)  { bg.textContent  = fmt3(gBuyUSD);  flash(bg); }
+      if (bgs) { bgs.textContent = fmt3(gSellUSD); flash(bgs); }
+      if (bs)  { bs.textContent  = fmt3(sBuyUSD);  flash(bs); }
+      if (bss) { bss.textContent = fmt3(sSellUSD); flash(bss); }
+      if (hg)  flash(hg);
+      if (hs)  flash(hs);
+    }
+  } catch(e) {
+    console.warn('Price fetch failed, using last known price');
+  }
+}
+
+
+function flashEl(el){if(!el)return;el.style.transition='background 0.05s';el.style.background='rgba(212,169,74,0.5)';setTimeout(function(){el.style.transition='background 0.3s';el.style.background='';},150);}
+function updatePrices(){
+  // Visual-only heartbeat flash, no price mutation. Real prices only change
+  // when fetchLivePrices() gets fresh data from the API (every 30s).
+  ['hGold','hSilver','bGoldBuy','bGoldSell','bSilverBuy','bSilverSell'].forEach(function(id){flashEl(document.getElementById(id));});
+  document.querySelectorAll('.buy-price,.sell-price').forEach(function(el){flashEl(el);});
+}
+function updateClock(){
+  const n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('en-AE',{hour12:false});
+  document.getElementById('dateline').textContent=n.toLocaleDateString('en-AE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+}
+calcPrices();
+renderRows(PRICES.gold,'goldRows','gold');
+renderRows(PRICES.silver,'silverRows','silver');
+updateClock();
+loadServerMedia(); // load persisted media from server
+// Load saved spread from server on init
+async function loadSpread() {
+  try {
+    const r = await fetch('spread.json?t='+Date.now());
+    if (!r.ok) return;
+    const d = await r.json();
+    if (d.master) {
+      MASTER.goldBid   = d.master.goldBid;
+      MASTER.goldAsk   = d.master.goldAsk;
+      MASTER.silverBid = d.master.silverBid;
+      MASTER.silverAsk = d.master.silverAsk;
+      document.getElementById('masterGoldBid').value   = d.master.goldBid;
+      document.getElementById('masterGoldAsk').value   = d.master.goldAsk;
+      document.getElementById('masterSilverBid').value = d.master.silverBid;
+      document.getElementById('masterSilverAsk').value = d.master.silverAsk;
+    }
+    if (d.override) {
+      ['gold','silver'].forEach(type => {
+        (d.override[type]||[]).forEach((ovr, i) => {
+          OVERRIDE[type][i] = ovr;
+          const chk = document.getElementById('ovr_'+type+'_'+i);
+          if (chk) {
+            chk.checked = !!ovr;
+            const bidEl = document.getElementById('ovrBid_'+type+'_'+i);
+            const askEl = document.getElementById('ovrAsk_'+type+'_'+i);
+            if (ovr && bidEl) { bidEl.value = ovr.bid; bidEl.disabled = false; }
+            if (ovr && askEl) { askEl.value = ovr.ask; askEl.disabled = false; }
+          }
+        });
+      });
+    }
+    calcPrices();
+    renderRows(PRICES.gold,   'goldRows',   'gold');
+    renderRows(PRICES.silver, 'silverRows', 'silver');
+  } catch(e) { console.warn('Could not load spread.json', e); }
+}
+
+fetchLivePrices(); // fetch immediately on load
+
+// Live sentiment simulator — dramatic swings with momentum
+(function() {
+  let pct = 65;
+  let target = 65;
+  let momentum = 0;
+  let phase = 0; // 0=buy surge, 1=pullback, 2=sell pressure, 3=recovery
+
+  function nextTarget() {
+    phase = (phase + 1) % 4;
+    if (phase === 0)      { target = 62 + Math.random() * 13; momentum =  0.8; } // buy surge 62-75%
+    else if (phase === 1) { target = 48 + Math.random() * 10; momentum = -0.5; } // pullback 48-58%
+    else if (phase === 2) { target = 35 + Math.random() * 12; momentum = -0.8; } // sell pressure 35-47%
+    else                  { target = 52 + Math.random() * 8;  momentum =  0.5; } // recovery 52-60%
+  }
+
+  function tick() {
+    // Momentum-driven creep — overshoots slightly then corrects
+    const diff = target - pct;
+    momentum = momentum * 0.92 + diff * 0.04;
+    pct = Math.min(82, Math.max(30, pct + momentum * 0.18));
+
+    const buy = Math.round(pct);
+    const sell = 100 - buy;
+    const bar    = document.getElementById('sentBar');
+    const buyEl  = document.getElementById('sentBuyers');
+    const sellEl = document.getElementById('sentSellers');
+
+    if (bar)    bar.style.width = pct + '%';
+    if (buyEl)  { buyEl.textContent = 'BUYERS ' + buy + '%'; buyEl.style.fontSize = buy > 65 ? '11px' : '10px'; }
+    if (sellEl) { sellEl.textContent = 'SELLERS ' + sell + '%'; sellEl.style.fontSize = sell > 55 ? '11px' : '10px'; }
+
+    // Dynamic glow — stronger when extreme
+    if (bar) {
+      const intensity = Math.abs(pct - 50) / 50;
+      if (buy > 55)      bar.style.filter = `brightness(${1+intensity*0.3}) drop-shadow(0 0 ${4+intensity*10}px rgba(34,197,94,${0.4+intensity*0.6}))`;
+      else if (buy < 45) bar.style.filter = `brightness(${1+intensity*0.3}) drop-shadow(0 0 ${4+intensity*10}px rgba(239,68,68,${0.4+intensity*0.6}))`;
+      else               bar.style.filter = 'brightness(1.05) drop-shadow(0 0 4px rgba(240,192,64,0.5))';
+    }
+  }
+
+  nextTarget();
+  setInterval(nextTarget, 7000); // phase shift every 7s
+  setInterval(tick, 100);        // update every 100ms for smooth feel
+})();
+
+function switchTab(name, el) {
+  document.querySelectorAll('.ap-tab-content').forEach(t => {
+    t.classList.remove('active');
+    t.style.display = 'none';
+  });
+  document.querySelectorAll('.ap-tab').forEach(t => t.classList.remove('active'));
+  const target = document.getElementById('tab-' + name);
+  if (target) { target.classList.add('active'); target.style.display = 'block'; }
+  (el || event.currentTarget).classList.add('active');
+}
+
+loadSpread();      // load saved spread from server
+async function loadShopInfo() {
+  try {
+    const r = await fetch('/api/shop.php');
+    const d = await r.json();
+    document.getElementById('shopName').value = d.name || '';
+    document.getElementById('shopTagline').value = d.tagline || '';
+    document.getElementById('shopWhatsapp').value = d.whatsapp || '';
+    document.getElementById('shopPhone').value = d.phone || '';
+    document.getElementById('shopEmail').value = d.email || '';
+    document.getElementById('shopAddress').value = d.address || '';
+    document.getElementById('shopMaps').value = d.mapsUrl || '';
+    if (d.hours && d.hours[0]) {
+      document.getElementById('shopHours1Day').value = d.hours[0].day || '';
+      document.getElementById('shopHours1Time').value = d.hours[0].time || '';
+    }
+    if (d.hours && d.hours[1]) {
+      document.getElementById('shopHours2Day').value = d.hours[1].day || '';
+      document.getElementById('shopHours2Time').value = d.hours[1].time || '';
+    }
+  } catch(e) { console.log('Could not load shop info', e); }
+}
+
+async function saveShopInfo() {
+  const data = {
+    name: document.getElementById('shopName').value,
+    tagline: document.getElementById('shopTagline').value,
+    whatsapp: document.getElementById('shopWhatsapp').value,
+    phone: document.getElementById('shopPhone').value,
+    email: document.getElementById('shopEmail').value,
+    address: document.getElementById('shopAddress').value,
+    mapsUrl: document.getElementById('shopMaps').value,
+    hours: [
+      { day: document.getElementById('shopHours1Day').value, time: document.getElementById('shopHours1Time').value },
+      { day: document.getElementById('shopHours2Day').value, time: document.getElementById('shopHours2Time').value }
+    ]
+  };
+  try {
+    const r = await fetch('/api/shop.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const res = await r.json();
+    if (res.success) {
+      const msg = document.getElementById('shopSaveMsg');
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    }
+  } catch(e) { alert('Save failed: ' + e); }
+}
+
+loadShopInfo();
+
+setInterval(updateClock,1000);
+setInterval(updatePrices,3500);
+setInterval(fetchLivePrices, 30*1000); // refresh every 30s
+
+// ── ORDERS TAB ────────────────────────────────────────────────────────────────
+const ORDERS_API = '/api/orders.php';
+const ORDERS_ADMIN_PASS = 'admin2024';
+let ordersData = [];
+
+async function loadOrders() {
+  const list = document.getElementById('orders-list');
+  if (list) list.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-size:12px;letter-spacing:.08em">Loading…</div>';
+  try {
+    const res = await fetch(ORDERS_API, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ admin_password: ORDERS_ADMIN_PASS })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Failed');
+    ordersData = data.orders || [];
+    updateOrdersStats();
+    renderOrdersTab();
+    // Update pending badge on tab
+    const pending = ordersData.filter(o => o.status === 'pending' || !o.status).length;
+    const badge = document.getElementById('orders-pending-badge');
+    if (badge) { badge.textContent = pending; badge.style.display = pending > 0 ? 'inline' : 'none'; }
+  } catch(e) {
+    if (list) list.innerHTML = '<div style="text-align:center;padding:30px;color:var(--red);font-size:12px">Failed to load: ' + e.message + '</div>';
+  }
+}
+
+function updateOrdersStats() {
+  const pending  = ordersData.filter(o => o.status === 'pending' || !o.status).length;
+  const approved = ordersData.filter(o => o.status === 'approved').length;
+  const total    = ordersData.reduce((s,o) => s + parseFloat(o.price_aed||0), 0);
+  const el = id => document.getElementById(id);
+  if (el('ostat-total'))   el('ostat-total').textContent   = ordersData.length;
+  if (el('ostat-pending')) el('ostat-pending').textContent = pending;
+  if (el('ostat-approved'))el('ostat-approved').textContent= approved;
+  if (el('ostat-value'))   el('ostat-value').textContent   = 'AED ' + Math.round(total).toLocaleString();
+}
+
+function renderOrdersTab() {
+  const filter = (document.getElementById('orders-filter')||{value:'all'}).value;
+  const filtered = filter === 'all' ? ordersData : ordersData.filter(o => (o.status||'pending') === filter);
+  const list = document.getElementById('orders-list');
+  if (!list) return;
+  if (!filtered.length) { list.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-size:12px">No orders</div>'; return; }
+
+  list.innerHTML = filtered.map(o => {
+    const isPending   = !o.status || o.status === 'pending';
+    const isApproved  = o.status === 'approved';
+    const metalColor  = (o.metal||'').toLowerCase() === 'gold' ? 'var(--gold)' : '#b0bac8';
+    const typeColor   = o.type === 'buy' ? 'var(--green)' : 'var(--red)';
+    const statusColors = { pending:'#fbbf24', approved:'var(--green)', cancelled:'var(--red)', completed:'#818cf8' };
+    const statusColor = statusColors[o.status||'pending'] || '#fbbf24';
+    const date = new Date(o.created_at).toLocaleString('en-AE',{dateStyle:'short',timeStyle:'short'});
+    const price = parseFloat(o.price_aed||0).toLocaleString('en-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+    return `<div style="background:var(--bg3);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:12px 14px;border-left:3px solid ${statusColor}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px;flex-wrap:wrap">
+        <div>
+          <span style="font-size:10px;color:var(--muted)">#${o.id}</span>
+          <span style="font-size:13px;font-weight:700;color:var(--text);margin-left:8px">${escO(o.customer_name||'Unknown')}</span>
+          <span style="font-size:11px;color:var(--muted);margin-left:6px">${escO(o.customer_phone||'')}</span>
+        </div>
+        <span style="font-size:9px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:10px;background:${statusColor}22;color:${statusColor};border:1px solid ${statusColor}44">${(o.status||'PENDING').toUpperCase()}</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:700;color:${metalColor}">${escO(o.purity||'')} ${(o.metal||'').toUpperCase()}</span>
+        <span style="font-size:10px;font-weight:800;color:${typeColor};background:${typeColor}18;padding:2px 7px;border-radius:4px;border:1px solid ${typeColor}33">${(o.type||'BUY').toUpperCase()}</span>
+        <span style="font-size:12px;color:var(--text)">${o.weight} ${o.unit||''}</span>
+        <span style="font-size:13px;font-weight:700;color:var(--gold);margin-left:auto">AED ${price}</span>
+      </div>
+      ${o.admin_notes||o.notes ? `<div style="font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);padding:6px 8px;border-radius:4px;margin-bottom:8px">📝 ${escO(o.admin_notes||o.notes)}</div>` : ''}
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:10px;color:var(--muted);flex:1">${date}</span>
+        ${isPending ? `
+          <button onclick="updateOrderInline(${o.id},'approved')"  style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:var(--green);font-size:10px;font-weight:700;padding:5px 10px;border-radius:5px;cursor:pointer">✓ Approve</button>
+          <button onclick="updateOrderInline(${o.id},'cancelled')" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red);font-size:10px;font-weight:700;padding:5px 10px;border-radius:5px;cursor:pointer">✕ Cancel</button>
+        ` : ''}
+        ${isApproved ? `
+          <button onclick="updateOrderInline(${o.id},'completed')" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);color:#818cf8;font-size:10px;font-weight:700;padding:5px 10px;border-radius:5px;cursor:pointer">✓ Complete</button>
+        ` : ''}
+        <button onclick="addOrderNote(${o.id})" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:10px;font-weight:700;padding:5px 10px;border-radius:5px;cursor:pointer">📝 Note</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function escO(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+async function updateOrderInline(id, status, notes) {
+  try {
+    const body = { admin_password: ORDERS_ADMIN_PASS, order_id: id, status };
+    if (notes !== undefined) body.admin_notes = notes;
+    const res  = await fetch(ORDERS_API, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error||'Failed');
+    const order = ordersData.find(o => o.id == id);
+    if (order) { if(status) order.status = status; if(notes!==undefined) order.admin_notes = notes; }
+    updateOrdersStats();
+    renderOrdersTab();
+    // flash toast
+    const t = document.getElementById('toast');
+    if(t){ t.textContent = notes !== undefined ? 'Note saved' : `Order #${id} → ${status.toUpperCase()}`; t.style.display='block'; setTimeout(()=>t.style.display='none',2500); }
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+}
+
+function addOrderNote(id) {
+  const order = ordersData.find(o => o.id == id);
+  const current = order?.admin_notes || '';
+  const note = prompt(`Note for Order #${id}:`, current);
+  if (note !== null) updateOrderInline(id, order?.status||'pending', note);
+}
+
+// Auto-refresh orders every 60s when tab is open
+setInterval(() => {
+  const tab = document.getElementById('tab-orders');
+  if (tab && tab.classList.contains('active')) loadOrders();
+}, 60000);
+</script>
+</body>
+</html>
